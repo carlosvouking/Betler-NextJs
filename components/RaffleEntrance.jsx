@@ -1,10 +1,11 @@
+import { useNotification } from "web3uikit"
 import React, { useEffect, useState } from "react"
 import { useWeb3Contract } from "react-moralis"
 import { contractAddresses, contractABI, networkExtraData } from "../constants/constant_files"
 import { useMoralis } from "react-moralis"
 import { ethers } from "ethers"
 import Marquee from "react-fast-marquee"
-import { useNotification } from "web3uikit"
+
 import { PropagateLoader } from "react-spinners"
 
 function RaffleEntrance() {
