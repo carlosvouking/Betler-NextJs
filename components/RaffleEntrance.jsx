@@ -22,7 +22,7 @@ function RaffleEntrance() {
     const [numberParticipants, setNumberParticipants] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
     const [participants, setParticipants] = useState([])
-
+yarn 
     const dispatch = useNotification()
 
     // make 'enterLottery()'  available to Frontend
@@ -86,7 +86,7 @@ function RaffleEntrance() {
         if (isWeb3Enabled) {
             updateContractDataOnUI()
         }
-    }, [isWeb3Enabled])
+    }, [isWeb3Enabled, updateContractDataOnUI])
 
     const handleSuccess = async (transaction) => {
         await transaction.wait(1)
