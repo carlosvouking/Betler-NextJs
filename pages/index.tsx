@@ -1,6 +1,7 @@
 import type { NextPage } from "next"
 import Head from "next/head"
 import { useMoralis } from "react-moralis"
+
 import { useEffect, useState } from "react"
 import { PropagateLoader } from "react-spinners"
 import { ethers } from "ethers"
