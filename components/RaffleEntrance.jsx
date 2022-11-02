@@ -118,13 +118,12 @@ function RaffleEntrance() {
             </h2>
             <div className="raffleStats-wrapper space-y-2 ">
                 <div className="raffleStats-wrapper">
-                    <div className="flex justify-between items-center text-white pb-2">
+                    {/* <div className="flex justify-between items-center text-white pb-2">
                         <h2 className="text-center">Participation</h2>
                         <p className="">
-                            {/* {entryPrice && ethers.utils.formatEther(entryPrice?.toString())}{" "} ETH */}
                         </p>
-                    </div>
-                    <div className="flex text-white items-center space-x-2 bg-[#22220f] border-[#2d3533] border p-3">
+                    </div> */}
+                    {/* <div className="flex text-white items-center space-x-2 bg-[#22220f] border-[#2d3533] border p-3">
                         <p>Entries</p>
                         <input
                             type="number"
@@ -134,7 +133,7 @@ function RaffleEntrance() {
                             value={quantity}
                             onChange={(e) => setQuantity(Number(e.target.value))}
                         />
-                    </div>
+                    </div> */}
 
                     <div className="space-y-2 mt-2">
                         <div className="flex items-center justify-between text-gray-400 text-sm italic font-extrabold">
