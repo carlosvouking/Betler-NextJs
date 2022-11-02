@@ -22,7 +22,7 @@ function RaffleEntrance() {
     const [numberParticipants, setNumberParticipants] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
     const [participants, setParticipants] = useState([])
-yarn 
+
     const dispatch = useNotification()
 
     // make 'enterLottery()'  available to Frontend
