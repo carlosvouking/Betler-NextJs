@@ -158,7 +158,8 @@ function RaffleEntrance() {
                                 {
                                     <Marquee className="bg-[#292919]" gradient={false} speed={40}>
                                         <p className="ml-3 text-amber-700 text-sm italic text-center font-bold">
-                                            No Lottery Address detected - network not supported
+                                            No Lottery Address detected - contract probably not
+                                            deployed to this network
                                         </p>
                                     </Marquee>
                                 }
