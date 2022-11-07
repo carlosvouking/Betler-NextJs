@@ -208,11 +208,11 @@ function RaffleEntrance() {
             <div className="raffleStats-wrapper border mt-5">
                 <div className="flex justify-between p-2 space-x-2">
                     <div className="raffleStats">
-                        <h2 className="text-sm">Currently Participating</h2>
-                        <p className="text-xl">{numberParticipants}</p>
+                        <h2 className="">- Currently Participating -</h2>
+                        <p className="text-2xl">{numberParticipants}</p>
                     </div>
                     <div className="raffleStats">
-                        <h2 className="text-sm"> </h2>
+                        <h2 className=""> </h2>
                         {/* <p className="text-xl">{remainingEntries?.toNumber()}</p>    */}
                     </div>
                 </div>
@@ -223,14 +223,16 @@ function RaffleEntrance() {
             </div> */}
                 <div className="flex justify-between p-2 space-x-2">
                     <div className="raffleStats">
-                        <h2 className="">List Current Participants</h2>
+                        <h2 className="">- List Current Participants -</h2>
                         <p className="text-sm">{participants}</p>
                     </div>
                 </div>
-                <h1 className="text-3xl text-yellow-200 font-semibold text-center">Next Pick</h1>
+                <h1 className="text-3xl text-yellow-200 font-semibold text-center">
+                    Next Automatic Pick
+                </h1>
                 <div className="flex justify-between p-2 space-x-2">
                     <div className="raffleStats">
-                        <h2 className="text-sm">Recent Winner</h2>
+                        <h2 className="text-sm">- Recent Winner -</h2>
                         <div className="text-sm">{recentWinner}</div>
                     </div>
                 </div>

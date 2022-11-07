@@ -33,6 +33,10 @@ function AdminControls() {
     const lotteryAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
     const networkName = chainId in networkExtraData ? networkExtraData[chainId][0] : null
 
+    const [participationFee, setParticipationfee] = useState("0")
+    const [numberParticipants, setNumberParticipants] = useState("0")
+    const [participants, setParticipants] = useState([])
+
     const pickWinner = async () => {
         try {
             const recentWinnerFromCall = await getRecentRandomWinner()
@@ -40,25 +44,52 @@ function AdminControls() {
         } catch (error) {}
     }
 
-    const restartLottery = async () => {
+    const rewindLottery = async () => {
         try {
             await restartLottery()
+            await updateContractDataOnUI()
         } catch (error) {}
+    }
+
+    async function updateContractDataOnUI() {
+        const numberParticipantsFromCall = (await getNumberOfParticipants()).toString()
+        const listParticipantsFromCall = (await getParticipants()).toString()
+
+        setNumberParticipants(numberParticipantsFromCall)
+        setParticipants(listParticipantsFromCall) // set the list of participants
     }
 
     const [recentWinner, setRecentWinner] = useState("0")
 
     const dispatch = useNotification()
 
-    // make 'getRecentRandomWinner()'  available to Frontend
-    const {
-        runContractFunction: getRecentRandomWinner,
-        isLoading,
-        isFetching,
-    } = useWeb3Contract({
+    const { runContractFunction: getRecentRandomWinner } = useWeb3Contract({
         abi: contractABI, // does not really change per network or blockchain...can be hardcoded
         contractAddress: lotteryAddress, // address of the deployed contract which doesn't really change.
         functionName: "getRecentRandomWinner",
+        params: {},
+    })
+
+    const { runContractFunction: restartLottery } = useWeb3Contract({
+        abi: contractABI, // does not really change per network or blockchain...can be hardcoded
+        contractAddress: lotteryAddress, // address of the deployed contract which doesn't really change.
+        functionName: "restartLottery",
+        params: {},
+    })
+
+    // make list of participants available to Frontend
+    const { runContractFunction: getParticipants } = useWeb3Contract({
+        abi: contractABI, // does not really change per network or blockchain...can be hardcoded
+        contractAddress: lotteryAddress, // address of the deployed contract which doesn't really change.
+        functionName: "getParticipants",
+        params: {},
+    })
+
+    // make 'getNumberOfParticipants()'  available to Frontend
+    const { runContractFunction: getNumberOfParticipants } = useWeb3Contract({
+        abi: contractABI, // does not really change per network or blockchain...can be hardcoded
+        contractAddress: lotteryAddress, // address of the deployed contract which doesn't really change.
+        functionName: "getNumberOfParticipants",
         params: {},
     })
 
@@ -72,7 +103,7 @@ function AdminControls() {
             type: "success",
             message: "Successfully entered the Lottery",
             title: "Winner picked",
-            position: "bottomR",
+            position: "bottomL",
             //icon: "bell",
         })
     }
@@ -89,23 +120,10 @@ function AdminControls() {
             </p>
 
             <div className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
-                <button
-                    className="admin-button"
-                    onClick={async () => {
-                        await pickWinner({
-                            onSuccess: handleSuccess,
-                            onError: (error) => console.log(error),
-                        })
-                    }}
-                    disabled={isLoading || isFetching}
-                >
-                    {isLoading || isFetching ? (
-                        <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
-                    ) : (
-                        <div>
-                            <StarIcon className="h-6 mx-auto mb-2" /> Pick A Random Winner
-                        </div>
-                    )}
+                <button className="admin-button" onClick={pickWinner}>
+                    <div>
+                        <StarIcon className="h-6 mx-auto mb-2" /> Pick A Random Winner
+                    </div>
                 </button>
 
                 {/* <button className="admin-button">
@@ -113,7 +131,7 @@ function AdminControls() {
                     Withdraw Commission Fee
                 </button> */}
                 <button className="admin-button">
-                    <ArrowPathIcon className="h-6 mx-auto mb-2" onClick={restartLottery} />
+                    <ArrowPathIcon className="h-6 mx-auto mb-2" onClick={rewindLottery} />
                     Restart Lottery
                 </button>
                 <button className="admin-button">
