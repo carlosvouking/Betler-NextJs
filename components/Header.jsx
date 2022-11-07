@@ -81,9 +81,9 @@ function Header() {
     })
 
     async function updateContractDataOnUI() {
-        const participationFeeFromCall = (await getParticipationFee()).toString()
+        const participationFeeFromCall = await getParticipationFee()
         const numberParticipantsFromCall = (await getNumberOfParticipants()).toString()
-        const recentWinnerFromCall = (await getRecentRandomWinner()).toString()
+        const recentWinnerFromCall = await getRecentRandomWinner()
         const listParticipantsFromCall = (await getParticipants()).toString()
 
         setParticipationfee(participationFeeFromCall) //raw  fee value saved on the backend

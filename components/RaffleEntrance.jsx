@@ -73,7 +73,7 @@ function RaffleEntrance() {
     async function updateContractDataOnUI() {
         const participationFeeFromCall = (await getParticipationFee()).toString()
         const numberParticipantsFromCall = (await getNumberOfParticipants()).toString()
-        const recentWinnerFromCall = (await getRecentRandomWinner()).toString()
+        const recentWinnerFromCall = await getRecentRandomWinner()
         const listParticipantsFromCall = (await getParticipants()).toString()
 
         setParticipationfee(participationFeeFromCall) //raw  fee value saved on the backend
@@ -86,7 +86,7 @@ function RaffleEntrance() {
         if (isWeb3Enabled) {
             updateContractDataOnUI()
         }
-    }, [isWeb3Enabled, updateContractDataOnUI])
+    }, [isWeb3Enabled])
 
     const handleSuccess = async (transaction) => {
         await transaction.wait(1)
@@ -113,17 +113,17 @@ function RaffleEntrance() {
     return (
         <div className="raffleStats-wrapper flex flex-col">
             {/* raffle entrance */}
-            <h2 className="text-white text-left text-sm italic">
+            {/* <h2 className="text-white text-left text-sm">
                 Current Network: <span className="text-amber-200 text-sm">{networkName}</span>
-            </h2>
-            <div className="raffleStats-wrapper space-y-2 ">
-                <div className="raffleStats-wrapper">
-                    {/* <div className="flex justify-between items-center text-white pb-2">
+            </h2> */}
+
+            <div className="raffleStats-wrapper">
+                {/* <div className="flex justify-between items-center text-white pb-2">
                         <h2 className="text-center">Participation</h2>
                         <p className="">
                         </p>
                     </div> */}
-                    {/* <div className="flex text-white items-center space-x-2 bg-[#22220f] border-[#2d3533] border p-3">
+                {/* <div className="flex text-white items-center space-x-2 bg-[#22220f] border-[#2d3533] border p-3">
                         <p>Entries</p>
                         <input
                             type="number"
@@ -135,85 +135,84 @@ function RaffleEntrance() {
                         />
                     </div> */}
 
-                    <div className="space-y-2 mt-2">
-                        <div className="flex items-center justify-between text-gray-400 text-sm italic font-extrabold">
-                            <p>Total participation Price</p>
-                            <p>
-                                {ethers.utils.formatUnits(participationFee)} ETH
-                                {/* {entryPrice && Number(ether.util.formatEther(entryPrice.toString())) * quantity}{" "} ETH */}
-                            </p>
-                        </div>
-                        {lotteryAddress ? (
-                            <div className="flex items-center justify-between text-gray-400 text-xs italic">
-                                <p className="ml-3">Service fees</p>
-                                <p>{ethers.utils.formatUnits(participationFee)} ETH</p>
-                            </div>
-                        ) : (
-                            <div>
-                                {
-                                    // <p className="ml-3 text-red-400 text-sm italic text-center">
-                                    //     No Lottery Address detected - Network not supported
-                                    // </p>
-                                }
-                                {
-                                    <Marquee className="bg-[#292919]" gradient={false} speed={40}>
-                                        <p className="ml-3 text-amber-700 text-sm italic text-center font-bold">
-                                            No Lottery Address detected - contract probably not
-                                            deployed to this network
-                                        </p>
-                                    </Marquee>
-                                }
-                            </div>
-                        )}
-
-                        <div className="flex items-center justify-between text-gray-400 text-xs italic">
-                            <p className="ml-3">
-                                + Network({" "}
-                                <span className="text-amber-200 text-sm">{networkName}</span> ) -
-                                Gas Fees
-                            </p>
-                            <p>{} ETH</p>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-400 text-xs italic">
-                            <p className="ml-3">+ Miscellaneous</p>
-                            <p>{} ETH</p>
-                        </div>
+                <div className="space-y-2 mt-2">
+                    <div className="flex items-center justify-between text-gray-400 text-sm italic font-extrabold">
+                        <p>Total participation Price</p>
+                        <p>
+                            {ethers.utils.formatUnits(participationFee)} ETH
+                            {/* {entryPrice && Number(ether.util.formatEther(entryPrice.toString())) * quantity}{" "} ETH */}
+                        </p>
                     </div>
+                    {lotteryAddress ? (
+                        <div className="flex items-center justify-between text-gray-400 text-xs italic">
+                            <p className="ml-3">Service fees</p>
+                            <p>{ethers.utils.formatUnits(participationFee)} ETH</p>
+                        </div>
+                    ) : (
+                        <div>
+                            {
+                                // <p className="ml-3 text-red-400 text-sm italic text-center">
+                                //     No Lottery Address detected - Network not supported
+                                // </p>
+                            }
+                            {
+                                <Marquee className="bg-[#292919]" gradient={false} speed={40}>
+                                    <p className="ml-3 text-amber-700 text-sm italic text-center font-bold">
+                                        No Address detected - contract probably not deployed to
+                                        this network
+                                    </p>
+                                </Marquee>
+                            }
+                        </div>
+                    )}
 
-                    <button
-                        //  disabled={expiration?.toString() < Date.now().toString() || remainingEntries?.toNumber() === 0}
-                        className="disabled mt-5 w-full bg-gradient-to-br from-yellow-300 to-stone-800 px-10 py-4 font-semibold rounded-md text-xl
+                    <div className="flex items-center justify-between text-gray-400 text-xs italic">
+                        <p className="ml-3">
+                            + Network({" "}
+                            <span className="text-amber-200 text-sm">{networkName}</span> ) - Gas
+                            Fees
+                        </p>
+                        <p>{} ETH</p>
+                    </div>
+                    <div className="flex items-center justify-between text-gray-400 text-xs italic">
+                        <p className="ml-3">+ Miscellaneous</p>
+                        <p>{} ETH</p>
+                    </div>
+                </div>
+
+                <button
+                    //  disabled={expiration?.toString() < Date.now().toString() || remainingEntries?.toNumber() === 0}
+                    className="disabled mt-5 w-full bg-gradient-to-br from-yellow-300 to-stone-800 px-10 py-4 font-semibold rounded-md text-xl
                                       selection: text-white shadow-xl disabled:from-gray-500 disabled:to-gray-100 disabled:text-gray-100 
                                       disabled:cursor-not-allowed "
-                        onClick={async () => {
-                            await enterLottery({
-                                onSuccess: handleSuccess,
-                                onError: (error) => console.log(error),
-                            })
-                        }}
-                        disabled={isLoading || isFetching}
-                    >
-                        {isLoading || isFetching ? (
-                            // <div className="animate-spin spinner-border h-12 w-12 border-b-2 rounded-full"></div>
-                            <div className="mb-6">
-                                <PropagateLoader size="30" color="#ca8a04" />
-                            </div>
-                        ) : (
-                            <div>Enter Lottery</div>
-                        )}
-                    </button>
-                </div>
+                    onClick={async () => {
+                        await enterLottery({
+                            onSuccess: handleSuccess,
+                            onError: (error) => console.log(error),
+                        })
+                    }}
+                    disabled={isLoading || isFetching}
+                >
+                    {isLoading || isFetching ? (
+                        // <div className="animate-spin spinner-border h-12 w-12 border-b-2 rounded-full"></div>
+                        <div className="mb-6">
+                            <PropagateLoader size="30" color="#ca8a04" />
+                        </div>
+                    ) : (
+                        <div>Enter Lottery</div>
+                    )}
+                </button>
             </div>
 
             {/* Next pick */}
             <div className="raffleStats-wrapper border mt-5">
                 <div className="flex justify-between p-2 space-x-2">
                     <div className="raffleStats">
-                        <h2 className="text-sm">Currently Paricipating</h2>
+                        <h2 className="text-sm">Currently Participating</h2>
                         <p className="text-xl">{numberParticipants}</p>
                     </div>
                     <div className="raffleStats">
-                        <h2 className="text-sm">Remaining </h2>
+                        <h2 className="text-sm"> </h2>
                         {/* <p className="text-xl">{remainingEntries?.toNumber()}</p>    */}
                     </div>
                 </div>
@@ -224,7 +223,7 @@ function RaffleEntrance() {
             </div> */}
                 <div className="flex justify-between p-2 space-x-2">
                     <div className="raffleStats">
-                        <h2 className="text-sm">Particpants Accounts</h2>
+                        <h2 className="">List Current Participants</h2>
                         <p className="text-sm">{participants}</p>
                     </div>
                 </div>
