@@ -1,19 +1,27 @@
-//import toast from "react-hot-toast"
+import { useNotification } from "web3uikit"
 import React, { useEffect, useState } from "react"
-import { useMoralis } from "react-moralis"
 import { useWeb3Contract } from "react-moralis"
 import { contractAddresses, contractABI, networkExtraData } from "../constants/constant_files"
-import { useNotification } from "web3uikit"
+import { useMoralis } from "react-moralis"
+import { ethers } from "ethers"
+import Marquee from "react-fast-marquee"
+import { PropagateLoader } from "react-spinners"
+
+
 
 import {
     StarIcon,
     CurrencyDollarIcon,
     ArrowPathIcon,
+    ArrowPathRoundedSquareIcon,
     ArrowUturnLeftIcon,
     ArrowDownOnSquareStackIcon,
     ArrowUturnDownIcon,
     ArrowUturnUpIcon,
-    CurrencyEuroIcon,
+    ArrowUturnRightIcon,
+    CurrencyEuroIcon,  
+    ReceiptRefundIcon ,
+    AcademicCapIcon
 } from "@heroicons/react/24/solid"
 
 function AdminControls() {
@@ -107,6 +115,7 @@ function AdminControls() {
             //icon: "bell",
         })
     }
+ 
 
     return (
         <div className="text-white text-center px-5 py-3 rounded-md border-stone-300/10 border flex-1">
@@ -122,7 +131,7 @@ function AdminControls() {
             <div className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
                 <button className="admin-button" onClick={pickWinner}>
                     <div>
-                        <StarIcon className="h-6 mx-auto mb-2" /> Pick A Random Winner
+                        <AcademicCapIcon className="h-6 mx-auto mb-2" /> Pick A Random Winner
                     </div>
                 </button>
 
@@ -131,11 +140,11 @@ function AdminControls() {
                     Withdraw Commission Fee
                 </button> */}
                 <button className="admin-button">
-                    <ArrowPathIcon className="h-6 mx-auto mb-2" onClick={rewindLottery} />
+                    <ArrowPathRoundedSquareIcon className="h-6 mx-auto mb-2" onClick={rewindLottery} />
                     Restart Lottery
                 </button>
                 <button className="admin-button">
-                    <ArrowUturnUpIcon className="h-6 mx-auto mb-2" />
+                    <ReceiptRefundIcon className="h-6 mx-auto mb-2" />
                     Refund All Participants
                 </button>
             </div>
