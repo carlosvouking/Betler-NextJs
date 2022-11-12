@@ -61,12 +61,10 @@ function AdminControls() {
         params: {},
     })
     async function updateContractDataOnUI() {
-        const participationFeeFromCall = (await getParticipationFee()).toString()
         const numberParticipantsFromCall = (await getNumberOfParticipants()).toString()
         const recentWinnerFromCall = await getRecentRandomWinner()
         const listParticipantsFromCall = (await getParticipants()).toString()
 
-        setParticipationfee(participationFeeFromCall) //raw  fee value saved on the backend
         setNumberParticipants(numberParticipantsFromCall)
         setRecentWinner(recentWinnerFromCall)
         setParticipants(listParticipantsFromCall) // set the list of participants
