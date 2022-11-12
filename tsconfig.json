@@ -26,7 +26,8 @@
         "pages/index.jsx",
         "components/RaffleEntrance.js",
         "components/NavButton_Enter.jsx",
-        "components/Header.jsx"
+        "components/Header.jsx",
+        "components/AdminControls.jsx"
     ],
     "exclude": ["node_modules"]
 }

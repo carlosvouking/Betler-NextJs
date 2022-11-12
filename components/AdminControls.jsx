@@ -1,13 +1,7 @@
 import { useNotification } from "web3uikit"
 import React, { useEffect, useState } from "react"
-import { useWeb3Contract } from "react-moralis"
+import { useWeb3Contract, useMoralis } from "react-moralis"
 import { contractAddresses, contractABI, networkExtraData } from "../constants/constant_files"
-import { useMoralis } from "react-moralis"
-import { ethers } from "ethers"
-import Marquee from "react-fast-marquee"
-import { PropagateLoader } from "react-spinners"
-
-
 
 import {
     StarIcon,
@@ -19,23 +13,12 @@ import {
     ArrowUturnDownIcon,
     ArrowUturnUpIcon,
     ArrowUturnRightIcon,
-    CurrencyEuroIcon,  
-    ReceiptRefundIcon ,
-    AcademicCapIcon
+    CurrencyEuroIcon,
+    ReceiptRefundIcon,
+    AcademicCapIcon,
 } from "@heroicons/react/24/solid"
 
 function AdminControls() {
-    //const {deployedContract, isLoading} = useContract(process.env.NEXT_PUBLIC_LOTTERY_CONTRACT_ADDRESS)
-
-    // const {data: totalCommission} = useContractData(
-    //     deployedContract, "raffleOperatorTotalCommission"
-    // )
-
-    // const {muteAsync: PickWinner} = useContractCall(deployedContract, "PickWinner")
-    // const {muteAsync: WithDrawCommission} = useContractCall(deployedContract, "WithDrawCommission")
-    // const {muteAsync: RestartPicking} = useContractCall(deployedContract, "RestartPicking")
-    // const {muteAsync: RefundEveryone} = useContractCall(deployedContract, "RefundEveryone")
-
     const { chainId: chainIdHex, isWeb3Enabled } = useMoralis()
     const chainId = parseInt(chainIdHex)
     const lotteryAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
@@ -43,31 +26,8 @@ function AdminControls() {
 
     const [participationFee, setParticipationfee] = useState("0")
     const [numberParticipants, setNumberParticipants] = useState("0")
-    const [participants, setParticipants] = useState([])
-
-    const pickWinner = async () => {
-        try {
-            const recentWinnerFromCall = await getRecentRandomWinner()
-            setRecentWinner(recentWinnerFromCall)
-        } catch (error) {}
-    }
-
-    const rewindLottery = async () => {
-        try {
-            await restartLottery()
-            await updateContractDataOnUI()
-        } catch (error) {}
-    }
-
-    async function updateContractDataOnUI() {
-        const numberParticipantsFromCall = (await getNumberOfParticipants()).toString()
-        const listParticipantsFromCall = (await getParticipants()).toString()
-
-        setNumberParticipants(numberParticipantsFromCall)
-        setParticipants(listParticipantsFromCall) // set the list of participants
-    }
-
     const [recentWinner, setRecentWinner] = useState("0")
+    const [participants, setParticipants] = useState([])
 
     const dispatch = useNotification()
 
@@ -100,22 +60,50 @@ function AdminControls() {
         functionName: "getNumberOfParticipants",
         params: {},
     })
+    async function updateContractDataOnUI() {
+        const participationFeeFromCall = (await getParticipationFee()).toString()
+        const numberParticipantsFromCall = (await getNumberOfParticipants()).toString()
+        const recentWinnerFromCall = await getRecentRandomWinner()
+        const listParticipantsFromCall = (await getParticipants()).toString()
 
-    const handleSuccess = async (transaction) => {
-        await transaction.wait(1)
-        handleNewNotification(transaction)
+        setParticipationfee(participationFeeFromCall) //raw  fee value saved on the backend
+        setNumberParticipants(numberParticipantsFromCall)
+        setRecentWinner(recentWinnerFromCall)
+        setParticipants(listParticipantsFromCall) // set the list of participants
     }
 
-    const handleNewNotification = () => {
-        dispatch({
-            type: "success",
-            message: "Successfully entered the Lottery",
-            title: "Winner picked",
-            position: "bottomL",
-            //icon: "bell",
-        })
+    useEffect(() => {
+        if (isWeb3Enabled) {
+            updateContractDataOnUI()
+        }
+    }, [isWeb3Enabled])
+
+    // const handleSuccess = async (transaction) => {
+    //     await transaction.wait(1)
+    //     handleNewNotification(transaction)
+    // }
+
+    // const handleNewNotification = () => {
+    //     dispatch({
+    //         type: "success",
+    //         message: "Successfully entered the Lottery",
+    //         title: "Winner picked",
+    //         position: "bottomL",
+    //         //icon: "bell",
+    //     })
+    // }
+
+    const pickWinner = async () => {
+        const recentWinnerFromCall = await getRecentRandomWinner()
+        setRecentWinner(recentWinnerFromCall)
     }
- 
+
+    const rewindLottery = async () => {
+        try {
+            await restartLottery()
+            await updateContractDataOnUI()
+        } catch (error) {}
+    }
 
     return (
         <div className="text-white text-center px-5 py-3 rounded-md border-stone-300/10 border flex-1">
@@ -140,7 +128,10 @@ function AdminControls() {
                     Withdraw Commission Fee
                 </button> */}
                 <button className="admin-button">
-                    <ArrowPathRoundedSquareIcon className="h-6 mx-auto mb-2" onClick={rewindLottery} />
+                    <ArrowPathRoundedSquareIcon
+                        className="h-6 mx-auto mb-2"
+                        onClick={rewindLottery}
+                    />
                     Restart Lottery
                 </button>
                 <button className="admin-button">
